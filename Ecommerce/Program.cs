@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Ecommerce.Data;
+
 namespace Ecommerce
 {
     public class Program
@@ -8,6 +11,10 @@ namespace Ecommerce
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            var connectionString = builder.Configuration.GetConnectionString("EcommerceConn")
+            ?? throw new InvalidOperationException("Connection string EcommerceConn not found");
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString, sql => sql.EnableRetryOnFailure()));
 
             var app = builder.Build();
 
